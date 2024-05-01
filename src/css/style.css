@@ -1,0 +1,357 @@
+@import 'font.css';
+@import 'mediaService.css';
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/*HEADER*/
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    padding: 15px;
+}
+
+.icon {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-size: 287px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-photo {
+    background-image: url('/src/img/profile-photo.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-family: "Oswald";
+}
+
+.time-was-online {
+    font-family: "Nunito";
+}
+
+.interaction-menu {
+    position: relative;
+}
+
+.interaction-menu>.icon {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.search {
+    background-image: url('../img/search.svg');
+    transition: background-image 90ms;
+}
+
+.search:hover {
+    background-image: url('../img/search-2.svg');
+    transition: background-image 90ms;
+}
+
+.send-video {
+    background-image: url('../img/video-off.svg');
+    transition: background-image 90ms;
+}
+
+.send-video:hover {
+    background-image: url('../img/video.svg');
+    transition: background-image 90ms;
+}
+
+.menu {
+    position: relative;
+    background-image: url('../img/menu-2.svg');
+    transition: background-image 90ms;
+}
+
+.menu:hover {
+    background-image: url('../img/menu.svg');
+    transition: background-image 90ms;
+}
+
+.container-menu {
+    min-width: 210px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 500ms;
+    z-index: 1;
+}
+
+.menu-items {
+    margin-top: 35px;
+}
+
+.menu-item {
+    padding: 0 13px;
+    font-size: 17px;
+    font-family: "Nunito";
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    opacity: 0.5;
+}
+
+.close-menu {
+    background-image: url('/src/img/close.svg');
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.close-menu:hover {
+    opacity: 0.5;
+}
+
+.all-messages {
+    padding-top: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 500ms;
+    z-index: 1;
+    width: 220px;
+    transform: translate(-50%, -50%);
+}
+
+.type-message {
+    color: white;
+    display: block;
+    padding: 0 13px;
+    font-size: 17px;
+    font-family: "Nunito";
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    width: 80%;
+    background-color: #2b9ec8;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.type-message:hover {
+    opacity: 0.5;
+}
+
+/*HEADER*/
+
+/*MAIN*/
+
+.main {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    min-height: 650px;
+    margin: auto;
+    border: 1px solid black;
+    margin-top: 20px;
+}
+
+.chat-main {
+    position: relative;
+    width: 100%;
+    background-color: rgba(217, 102, 255, 0.75);
+    min-height: 520px;
+    border: 1px solid black;
+}
+
+.close-all-messages {
+    background-image: url('/src/img/close.svg');
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.close-all-messages:hover {
+    opacity: 0.5;
+}
+
+
+/*MAIN*/
+
+/*FOOTER*/
+.chat-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 10%;
+    border: 1px solid black;
+    padding: 0px 30px;
+}
+
+
+
+.write-message {
+    display: flex;
+    width: 75%;
+    height: 70px;
+    padding: 0 20px;
+    font-size: 20px;
+    border: none;
+    resize: none;
+    font-family: "Oswald";
+    letter-spacing: 5px;
+    line-height: 65px;
+}
+
+.interactive-message>.icon {
+    margin-right: 10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.interactive-message {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.send-file {
+    background-image: url('../img/clip.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: background-image 90ms;
+    transition: transform 250ms;
+}
+
+.input-file {
+    display: none;
+}
+
+.send-file:hover {
+    transform: rotate(180deg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform 250ms;
+}
+
+.send-smile {
+    background-image: url('../img/face.svg');
+    transition: background-image 90ms;
+}
+
+.smile-container {
+    position: absolute;
+    top: -165%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    width: 160px;
+    background-color: white;
+    border: 1px solid;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+.emoji {
+    width: 40px;
+    cursor: pointer;
+}
+
+.emoji:hover {
+    opacity: 0.5;
+}
+
+.send-smile:hover {
+    background-image: url('../img/face-smile.svg');
+    transition: background-image 90ms;
+}
+
+.send-voice-message {
+    background-image: url('../img/microphone-off.svg');
+    transition: background-image 100ms;
+}
+
+.send-voice-message:hover {
+    background-image: url('../img/microphone.svg');
+    transition: background-image 100ms;
+}
+
+.send-text-message {
+    background-image: url('../img/send-text-message.svg');
+    transition: background-image 250ms;
+}
+
+.send-text-message:hover {
+    background-image: url('../img/send-text-message-2.svg');
+    transition: background-image 100ms;
+}
+
+/*FOOTER*/
+
+.send_,
+.timer_,
+.stop_ {
+    visibility: hidden;
+    display: none;
+}

@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "Oswald";
+    src: url('/src/font/Oswald-Regular.ttf');
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url('/src/font/Nunito-Regular.ttf');
+}
