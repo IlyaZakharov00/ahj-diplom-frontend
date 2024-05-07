@@ -16,18 +16,6 @@
     padding: 15px;
 }
 
-.icon {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background-size: 287px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-repeat: no-repeat;
-    cursor: pointer;
-}
-
 .profile {
     display: flex;
     justify-content: space-between;
@@ -52,8 +40,67 @@
     font-family: "Nunito";
 }
 
+.connection-to-server {
+    animation-name: connection-animation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+
+    content: '';
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background-color: red;
+}
+
+.connection-to-server-result {
+    font-size: 15px;
+    font-family: "Nunito";
+    margin-left: 20px;
+}
+
+@keyframes connection-animation {
+
+    from {
+        opacity: 1;
+    }
+
+    25% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    75% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
 .interaction-menu {
     position: relative;
+}
+
+.icon {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-size: 287px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
 
 .interaction-menu>.icon {
@@ -68,16 +115,6 @@
 
 .search:hover {
     background-image: url('../img/search-2.svg');
-    transition: background-image 90ms;
-}
-
-.send-video {
-    background-image: url('../img/video-off.svg');
-    transition: background-image 90ms;
-}
-
-.send-video:hover {
-    background-image: url('../img/video.svg');
     transition: background-image 90ms;
 }
 
@@ -112,6 +149,7 @@
 
 .menu-items {
     margin-top: 35px;
+    text-align: center;
 }
 
 .menu-item {
@@ -143,44 +181,6 @@
     opacity: 0.5;
 }
 
-.all-messages {
-    padding-top: 40px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    border: 1px solid;
-    border-radius: 20px;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 500ms;
-    z-index: 1;
-    width: 220px;
-    transform: translate(-50%, -50%);
-}
-
-.type-message {
-    color: white;
-    display: block;
-    padding: 0 13px;
-    font-size: 17px;
-    font-family: "Nunito";
-    text-align: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    width: 80%;
-    background-color: #2b9ec8;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.type-message:hover {
-    opacity: 0.5;
-}
 
 /*HEADER*/
 
@@ -206,9 +206,43 @@
 .chat-main {
     position: relative;
     width: 100%;
+    height: 520px;
     background-color: rgba(217, 102, 255, 0.75);
-    min-height: 520px;
     border: 1px solid black;
+    overflow-y: scroll;
+}
+
+.chat-main::-webkit-scrollbar {
+    width: 15px;
+}
+
+.chat-main::-webkit-scrollbar-track {
+    background: rgba(217, 102, 255, 0.75);
+}
+
+.chat-main::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 20px;
+}
+
+.all-messages {
+    padding-top: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 500ms;
+    z-index: 1;
+    width: 220px;
+    transform: translate(-50%, -50%);
 }
 
 .close-all-messages {
@@ -219,14 +253,35 @@
     background-repeat: no-repeat;
     cursor: pointer;
     position: absolute;
-    top: 5px;
+    top: 10px;
     right: 5px;
+    transition: transform 1s;
 }
 
 .close-all-messages:hover {
+    transform: rotate(180deg);
+    transition: transform 1s;
     opacity: 0.5;
 }
 
+.type-message {
+    color: white;
+    display: block;
+    padding: 0 13px;
+    font-size: 17px;
+    font-family: "Nunito";
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    width: 80%;
+    background-color: #2b9ec8;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.type-message:hover {
+    opacity: 0.5;
+}
 
 /*MAIN*/
 
@@ -240,7 +295,131 @@
     padding: 0px 30px;
 }
 
+.form-send-file {
+    display: flex;
+    justify-content: center;
+    width: 45px;
+    padding: 5px;
+    transition: width 1s;
+}
 
+.form-send-file-loaded {
+    width: 200px;
+    justify-content: space-between;
+    transition: width 1s;
+}
+
+.send-file {
+    background-image: url('../img/clip.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: background-image 90ms;
+    transition: transform 250ms;
+}
+
+.send-file:hover {
+    transform: rotate(180deg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform 250ms;
+}
+
+.send-file-sticker {
+
+    /* content: ''; */
+    display: block;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    background-color: #0000ff9c;
+    border-radius: 10px;
+    margin-left: -10px;
+    visibility: hidden;
+}
+
+.sticker-animation {
+    animation-name: sticker-animation;
+    animation-duration: 1s;
+    transition: ease-out;
+    position: absolute;
+    top: 20px;
+    left: 45px;
+    width: 18px;
+    height: 18px;
+    border-radius: 10px;
+    content: "";
+    background-repeat: no-repeat;
+    object-fit: cover;
+}
+
+@keyframes sticker-animation {
+
+    from {
+        top: -20px;
+        left: 45px;
+        opacity: 1;
+    }
+
+    25% {
+        top: -40px;
+        left: 45px;
+        opacity: 0.8;
+    }
+
+    50% {
+        top: -53px;
+        left: 0px;
+        opacity: 0.6;
+    }
+
+    75% {
+        top: -126px;
+        left: 85px;
+        opacity: 0.4;
+    }
+
+
+    100% {
+        top: -180px;
+        left: 5px;
+        opacity: 0.2;
+
+    }
+
+    to {
+        top: -200px;
+        left: 45px;
+        opacity: 0;
+    }
+}
+
+.form-btn-submit {
+    font-size: 14px;
+    font-family: "Nunito";
+    text-align: center;
+    border-radius: 10px;
+    border: none;
+    background-color: purple;
+    color: white;
+    cursor: pointer;
+    /* display: none; */
+    width: 0px;
+    transition: width 1s;
+}
+
+.form-btn-submit-loaded {
+    display: block;
+    width: 120px;
+    transition: width 1s;
+}
+
+.form-btn-submit:hover {
+    opacity: 0.5;
+}
 
 .write-message {
     display: flex;
@@ -253,7 +432,19 @@
     font-family: "Oswald";
     letter-spacing: 5px;
     line-height: 65px;
+    outline: none;
 }
+
+.write-message-input {
+    position: absolute;
+    left: 290px;
+    width: 840px;
+    height: 70px;
+    opacity: 0;
+    cursor: text;
+    /* visibility: hidden; */
+}
+
 
 .interactive-message>.icon {
     margin-right: 10px;
@@ -268,27 +459,6 @@
     justify-content: center;
     align-content: center;
     align-items: center;
-}
-
-.send-file {
-    background-image: url('../img/clip.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    transition: background-image 90ms;
-    transition: transform 250ms;
-}
-
-.input-file {
-    display: none;
-}
-
-.send-file:hover {
-    transform: rotate(180deg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    transition: transform 250ms;
 }
 
 .send-smile {
@@ -327,6 +497,17 @@
     transition: background-image 90ms;
 }
 
+/* .input-file {
+    display: none;
+} */
+
+.send_,
+.timer_,
+.stop_ {
+    visibility: hidden;
+    display: none;
+}
+
 .send-voice-message {
     background-image: url('../img/microphone-off.svg');
     transition: background-image 100ms;
@@ -335,6 +516,16 @@
 .send-voice-message:hover {
     background-image: url('../img/microphone.svg');
     transition: background-image 100ms;
+}
+
+.send-video {
+    background-image: url('../img/video-off.svg');
+    transition: background-image 90ms;
+}
+
+.send-video:hover {
+    background-image: url('../img/video.svg');
+    transition: background-image 90ms;
 }
 
 .send-text-message {
@@ -348,10 +539,3 @@
 }
 
 /*FOOTER*/
-
-.send_,
-.timer_,
-.stop_ {
-    visibility: hidden;
-    display: none;
-}

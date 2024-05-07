@@ -1,43 +1,19 @@
-* {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    width: 100%;
-    height: 100%;
-}
-
-.input-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin-top: 50px;
-}
-
-.input-text {
-    width: 100%;
-    height: 100%;
-    max-width: 700px;
-    max-height: 50px;
-    padding: 10px;
-    resize: none;
-    border-radius: 10px;
-    font-size: 20px;
-}
-
-.btn-container {
-    margin-left: 20px;
-}
+@import 'font.css';
 
 .btn {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    background: none;
+    border: none;
     cursor: pointer;
     transition: opacity 100ms linear;
     z-index: 1;
+}
+
+.btn:hover {
+    opacity: 0.5;
+}
+
+.btn:active {
+    opacity: 0.3;
 }
 
 .add-mesage {
@@ -61,17 +37,9 @@ body {
     border: none;
 }
 
-.btn:hover {
-    opacity: 0.5;
-}
-
-.btn:active {
-    opacity: 0.3;
-}
-
 .list-msg {
     padding: 20px 0;
-    width: 58%;
+    width: 50%;
     list-style: none;
     margin: auto;
     margin-top: 20px;
@@ -80,27 +48,94 @@ body {
 
 .msg {
     word-break: break-word;
-    width: 50%;
+    width: 70%;
     min-height: 50px;
     margin: auto;
     padding: 20px;
-    border: 1px solid;
     background-color: white;
     margin-top: 10px;
     border-radius: 20px;
+    background-color: #9c1ec9;
+    border: 2px solid white;
+    box-shadow: 20px 5px 15px white;
 }
 
 .element-header {
+    font-size: 17px;
+    font-family: "Nunito";
     text-align: right;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.element-content-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.element-content {
+    color: white;
+    font-size: 17px;
+    font-family: "Nunito";
+}
+
+.element-save-content {
+    background-image: url('/src/img/save.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.element-link {
+    text-decoration: none;
+}
+
+.element-link:hover {
+    text-decoration: underline black;
+}
+
+.element-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
 }
 
 .element-geolocation {
     display: inline-block;
-    margin-top: 15px;
+    font-size: 17px;
+    font-family: "Nunito";
+    color: white;
 }
 
 .element-date {
     margin-right: 10px;
+}
+
+.element-delete {
+    display: inline-block;
+    background-image: url('/src/img/delete-msg.svg');
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+    transition: background-image 1s;
+    transition: transform 500ms;
+}
+
+.element-delete:hover {
+    background-image: url('/src/img/delete-msg-2.svg');
+    background-size: cover;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    transform: rotate(360deg);
+    transition: background-image 1s;
+    transition: transform 500ms;
+    opacity: 0.5;
+    cursor: pointer;
 }
 
 .form-error {
@@ -116,7 +151,7 @@ body {
 
     border-radius: 10px;
     width: 380px;
-    height: 165px;
+    height: 180px;
     padding: 15px;
 
     background-color: white;
@@ -151,9 +186,10 @@ body {
 
 .form-close {
     content: "";
-    background-color: gray;
-    width: 20px;
-    height: 20px;
+    background-image: url('/src/img/close.svg');
+    background-size: cover;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
 }
 
@@ -219,7 +255,7 @@ body {
 
 .video {
     display: block;
-    width: 400px;
-    height: 300px;
+    width: 330px;
+    height: 250px;
     margin: auto;
 }

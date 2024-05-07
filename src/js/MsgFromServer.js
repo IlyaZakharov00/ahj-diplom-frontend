@@ -1,9 +1,10 @@
-export class Message {
-  constructor(coords) {
-    this.coords = coords;
-  }
+import { deleteThisMsg } from "./serverControl";
+import { downloadFile } from "./serverControl";
 
-  createtUlList() {
+export class MsgFromServer {
+  constructor() {}
+
+  crtUlList() {
     let container = document.querySelector(".messages-container");
     let chatMain = document.querySelector(".chat-main");
     if (!container) {
@@ -13,7 +14,9 @@ export class Message {
     chatMain.appendChild(container);
   }
 
-  createMsg(data) {
+  crtMsg(item) {
+    this.crtUlList();
+
     let ul = document.querySelector(".list-msg");
     let element = document.createElement("li");
     let header = document.createElement("div");
@@ -25,7 +28,7 @@ export class Message {
     let deleteMsg = document.createElement("span");
 
     element.setAttribute("type", "txt");
-    element.setAttribute("id", this.createId());
+    element.setAttribute("id", item.id);
 
     element.classList.add("msg");
     header.classList.add("element-header");
@@ -36,8 +39,10 @@ export class Message {
     geolocation.classList.add("element-geolocation");
     deleteMsg.classList.add("element-delete");
 
-    content.textContent = data;
-    geolocation.textContent = `[${this.coords[0]},` + ` ${this.coords[1]}]`;
+    content.textContent = item.content;
+    geolocation.textContent = item.coords;
+    date.textContent = item.date;
+    time.textContent = item.time;
 
     header.appendChild(date);
     header.appendChild(time);
@@ -51,7 +56,9 @@ export class Message {
     return element;
   }
 
-  createLink(data) {
+  crteLink(item) {
+    this.crtUlList();
+
     let ul = document.querySelector(".list-msg");
     let element = document.createElement("li");
     let header = document.createElement("div");
@@ -64,8 +71,8 @@ export class Message {
     let deleteMsg = document.createElement("span");
 
     element.setAttribute("type", "link");
-    element.setAttribute("id", this.createId());
-    link.setAttribute("href", data);
+    element.setAttribute("id", item.id);
+    link.setAttribute("href", item.link);
 
     element.classList.add("msg");
     header.classList.add("element-header");
@@ -77,8 +84,10 @@ export class Message {
     geolocation.classList.add("element-geolocation");
     deleteMsg.classList.add("element-delete");
 
-    content.textContent = data;
-    geolocation.textContent = `[${this.coords[0]},` + ` ${this.coords[1]}]`;
+    content.textContent = item.content;
+    geolocation.textContent = item.coords;
+    date.textContent = item.date;
+    time.textContent = item.time;
 
     header.appendChild(date);
     header.appendChild(time);
@@ -93,8 +102,9 @@ export class Message {
     return element;
   }
 
-  createFile(file, link) {
-    
+  crtFile(file) {
+    this.crtUlList();
+
     let ul = document.querySelector(".list-msg");
     let element = document.createElement("li");
     let header = document.createElement("div");
@@ -108,8 +118,8 @@ export class Message {
     let deleteMsg = document.createElement("span");
 
     element.setAttribute("type", "file");
-    element.setAttribute("id", this.createId());
-    content.setAttribute("href", link);
+    element.setAttribute("id", file.id);
+    content.setAttribute("href", file.link);
 
     element.classList.add("msg");
     header.classList.add("element-header");
@@ -123,7 +133,9 @@ export class Message {
     deleteMsg.classList.add("element-delete");
 
     content.textContent = file.name;
-    geolocation.textContent = `[${this.coords[0]},` + ` ${this.coords[1]}]`;
+    date.textContent = file.date;
+    time.textContent = file.time;
+    geolocation.textContent = file.coords;
 
     header.appendChild(date);
     header.appendChild(time);
@@ -136,10 +148,13 @@ export class Message {
     element.appendChild(footer);
 
     ul.append(element);
+
     return element;
   }
 
-  createVideo(data) {
+  crtVideo(item, link) {
+    this.crtUlList();
+
     let ul = document.querySelector(".list-msg");
     let element = document.createElement("li");
     let video = document.createElement("video");
@@ -152,11 +167,12 @@ export class Message {
     let deleteMsg = document.createElement("span");
 
     element.setAttribute("type", "video");
-    element.setAttribute("id", this.createId());
+    element.setAttribute("id", item.id);
 
     element.classList.add("msg");
 
     video.classList.add("video");
+    video.setAttribute("src", link);
     video.controls = true;
 
     header.classList.add("element-header");
@@ -169,8 +185,10 @@ export class Message {
     geolocation.classList.add("element-geolocation");
     deleteMsg.classList.add("element-delete");
 
-    content.textContent = data;
-    geolocation.textContent = `[${this.coords[0]},` + ` ${this.coords[1]}]`;
+    content.textContent = item.content;
+    geolocation.textContent = item.coords;
+    date.textContent = item.date;
+    time.textContent = item.time;
 
     header.appendChild(date);
     header.appendChild(time);
@@ -184,8 +202,9 @@ export class Message {
     return element;
   }
 
-  createAudio(data) {
-    console.log(data);
+  crtAudio(item, link) {
+    this.crtUlList();
+
     let ul = document.querySelector(".list-msg");
     let element = document.createElement("li");
     let audio = document.createElement("audio");
@@ -198,11 +217,12 @@ export class Message {
     let deleteMsg = document.createElement("span");
 
     element.setAttribute("type", "audio");
-    element.setAttribute("id", this.createId());
+    element.setAttribute("id", item.id);
 
     element.classList.add("msg");
 
     audio.classList.add("audio");
+    audio.setAttribute("src", link);
     audio.controls = true;
 
     header.classList.add("element-header");
@@ -215,8 +235,10 @@ export class Message {
     geolocation.classList.add("element-geolocation");
     deleteMsg.classList.add("element-delete");
 
-    content.textContent = data;
-    geolocation.textContent = `[${this.coords[0]},` + ` ${this.coords[1]}]`;
+    content.textContent = item.content;
+    geolocation.textContent = item.coords;
+    date.textContent = item.date;
+    time.textContent = item.time;
 
     header.appendChild(date);
     header.appendChild(time);
@@ -230,27 +252,61 @@ export class Message {
     return element;
   }
 
-  createAttribute(element) {
-    let data = element.querySelector(".element-date");
-    let time = element.querySelector(".element-time");
+  crtAllMsg(item) {
+    if (item.type == "txt") {
+      let message = this.crtMsg(item);
+      let deleteMsg = message.querySelector(".element-delete");
+      deleteMsg.addEventListener("click", deleteThisMsg);
+    }
 
-    let date = new Date();
-    let year = date.getFullYear();
-    let mounth = date.getMonth() + 1;
-    let day = date.getDate();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
+    if (item.type == "link") {
+      let message = this.crteLink(item);
+      let deleteMsg = message.querySelector(".element-delete");
+      deleteMsg.addEventListener("click", deleteThisMsg);
+    }
 
-    if (String(mounth).length == 1) mounth = "0" + mounth;
-    if (String(day).length == 1) mounth = "0" + day;
-    if (String(hours).length == 1) hours = "0" + hours;
-    if (String(minutes).length == 1) minutes = "0" + minutes;
-    if (String(seconds).length == 1) seconds = "0" + seconds;
+    if (item.type == "file") {
+      let message = this.crtFile(item);
+      let deleteMsg = message.querySelector(".element-delete");
+      let saveFile = message.querySelector(".element-save-content");
+      deleteMsg.addEventListener("click", deleteThisMsg);
+      saveFile.addEventListener("click", downloadFile);
+    }
 
-    data.textContent = day + "." + mounth + "." + year;
-    time.textContent = hours + ":" + minutes + ":" + seconds;
+    if (item.type == "audio") {
+      let reader = new FileReader();
+      let blob = new Blob([item.content]);
+      let message_ = this;
+
+      reader.readAsText(blob);
+
+      reader.onload = function () {
+        let link;
+        link = reader.result;
+        console.log(link);
+
+        let message = message_.crtAudio(item, link);
+        let deleteMsg = message.querySelector(".element-delete");
+        deleteMsg.addEventListener("click", deleteThisMsg);
+      };
+    }
+
+    if (item.type == "video") {
+      let reader = new FileReader();
+      let blob = new Blob([item.content]);
+      let message_ = this;
+
+      reader.readAsText(blob);
+
+      reader.onload = function () {
+        let link;
+        link = reader.result;
+        console.log(link);
+
+        let message = message_.crtVideo(item, link);
+        let deleteMsg = message.querySelector(".element-delete");
+        deleteMsg.addEventListener("click", deleteThisMsg);
+      };
+    }
   }
-
-  createId = () => Math.random().toString(36).slice(2);
 }

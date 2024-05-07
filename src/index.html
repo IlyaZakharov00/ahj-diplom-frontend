@@ -18,14 +18,16 @@
                         <div class="profile-name">Избранное</div>
                         <div class="time-was-online">Был в сети недавно...</div>
                     </div>
+                    <span class="connection-to-server-result">Устанавливаем соединение с сервером...</span>
+                    <span class="connection-to-server"></span>
                 </div>
                 <div class="interaction-menu">
                     <span class="icon search"></span>
                     <span class="icon menu"></span>
                     <div class="container-menu">
                         <div class="menu-items">
-                            <div class="menu-item show-messages">Показать вложения</div>
-                            <div class="menu-item clear-chat">Очистить историю</div>
+                            <button class="btn menu-item show-messages">Показать вложения</button>
+                            <button class=" btn menu-item clear-chat">Очистить историю</button>
                         </div>
                         <div class="close-menu"></div>
                     </div>
@@ -35,19 +37,22 @@
                 <ul class="messages-container"></ul>
                 <div class="all-messages">
                     <div class="close-all-messages"></div>
-                    <div class="type-message photos">Фотографии</div>
-                    <div class="type-message videos">Видео</div>
-                    <div class="type-message files">Файлы</div>
-                    <div class="type-message links">Ссылки</div>
-                    <div class="type-message voices">Голосовые сообщения</div>
-                    <div class="type-message videos">Видео-сообщения</div>
+                    <button class="btn type-message files" type="file">Файлы</button>
+                    <button class="btn type-message txtMsgs" type="txt">Текстовые сообщения</button>
+                    <button class="btn type-message links" type="link">Ссылки</button>
+                    <button class="btn type-message voices" type="audio">Голосовые сообщения</button>
+                    <button class="btn type-message videos" type="video">Видео-сообщения</button>
+                    <button class="btn type-message allMsgs">Все сообщения</button>
                 </div>
             </main>
             <footer class="chat-footer">
-                <label class="icon send-file">
-                    <input type="file" class="input-file">
-                </label>
-                <textarea class="write-message" placeholder="Написать сообщение..."></textarea>
+                <form action="http://localhost:3030/" method="post" class="form-send-file">
+                    <label for="img-input" class="icon send-file"><span class="send-file-sticker"></span></label>
+                    <input type="file" style="display: none;" id="img-input">
+                    <input type="submit" value="Отправить файл" class="form-btn-submit">
+                </form>
+                <input type="file" id="write-message-input" class="write-message-input">
+                <textarea class="write-message" placeholder="Напишите сообщение или перетащите файл..."></textarea>
                 <span class="interactive-message">
                     <span class="icon send-smile"></span>
                     <span class="icon send-voice-message"></span>

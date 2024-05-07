@@ -1,17 +1,7 @@
-import { Message } from "./message";
-import { getPermissionCoords } from "./media";
-import { getPermissionAudio } from "./media";
-import { getPermissionVideo } from "./media";
-import { coordsErrorForm } from "./media";
-import { sendTextMessage } from "./media";
-import { startRecordAudio } from "./media";
-import { sendAudio } from "./media";
-import { deleteAudio } from "./media";
-import { startRecordVideo } from "./media";
-import { sendVideo } from "./media";
-import { deleteVideo } from "./media";
-import { createTimer } from "./media";
-import { deleteTimer } from "./media";
+import { sendTextMessage } from "./mediaControl";
+import { startRecordAudio } from "./mediaControl";
+import { sendFileEvent } from "./mediaControl";
+import { deleteAllMesseges } from "./serverControl";
 
 export class Chat {
   constructor(
@@ -43,9 +33,10 @@ export class Chat {
   };
 
   showAllMessagesBlock = () => {
+    let btnCloseMenu = document.querySelector(".close-menu");
+    btnCloseMenu.click();
     this.allMessages.style.visibility = "visible";
     this.allMessages.style.opacity = "1";
-    this.containerMenu.style.visibility = "hidden";
   };
 
   closeAllMessagesBlock = () => {
@@ -58,6 +49,7 @@ export class Chat {
     if (
       e.data == null &&
       e.data !== undefined &&
+      e.inputType !== "insertFromPaste" &&
       (this.textArea.value == "" || !sendText)
     ) {
       this.iconSendVoiceMessage.classList.remove("send-text-message");
@@ -74,7 +66,8 @@ export class Chat {
     if (
       (e.data == " " || sendText || e.data == null) &&
       !sendText &&
-      e.data !== undefined
+      e.data !== undefined &&
+      e.inputType !== "insertFromPaste"
     ) {
       this.iconSendVoiceMessage.classList.add("send-voice-message");
       sendText.addEventListener("click", startRecordAudio);
@@ -113,5 +106,49 @@ export class Chat {
 
   listenerEmojiMouseOut = () => {
     this.timer = setTimeout(this.closeMenuSmile, 2000);
+  };
+
+  clearChat = () => {
+    deleteAllMesseges();
+    let allMsg = document.querySelectorAll(".msg");
+    let btnCloseMenu = document.querySelector(".close-menu");
+    btnCloseMenu.click();
+    for (const msg of allMsg) {
+      msg.remove();
+    }
+  };
+
+  filterMessages = (e) => {
+    console.log(e, e.target, e.target.getAttribute("type"));
+  };
+
+  sendFile = (e) => {
+    e.preventDefault();
+    let form = e.target;
+    let sticker = document.querySelector(".send-file-sticker");
+    let btnSubmit = document.querySelector(".form-btn-submit");
+    let inputSendFileTextArea = document.getElementById("write-message-input");
+
+    form.classList.remove("form-send-file-loaded");
+    btnSubmit.classList.remove("form-btn-submit-loaded");
+    sticker.classList.add("sticker-animation");
+
+    sticker.addEventListener("animationend", () => {
+      sticker.style.visibility = "hidden";
+      sticker.classList.remove("sticker-animation");
+      sticker.textContent = "";
+    });
+
+    let file = e.srcElement[0].files[0];
+    if (!file) return;
+
+    let blob = new Blob([file]);
+    let link = URL.createObjectURL(blob);
+
+    // let id = () => Math.random().toString(36).slice(2);
+
+    inputSendFileTextArea.style.display = "block";
+    sendFileEvent(file, link);
+    // console.log("sendfile", inputSendFileTextArea.files);
   };
 }

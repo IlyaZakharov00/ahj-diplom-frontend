@@ -1,6 +1,10 @@
-import { Message } from "./message";
-import { validateCoords } from "./validateCoords";
-import { sendToServer } from "./senToServer";
+import { Message } from "./Message";
+import { sendToServer } from "./serverControl";
+import { deleteThisMsg } from "./serverControl";
+import { sendMediaMsg } from "./serverControl";
+import { sendFileToServer } from "./serverControl";
+import { downloadFile } from "./serverControl";
+import { validateCoords } from "./callbacks";
 
 let userCoords;
 let videoPermisiion;
@@ -9,10 +13,10 @@ let timer;
 
 let recorder;
 let videoPlayer;
-let stream;
-let src;
-
 let audioPlayer;
+let stream;
+let sendOrDelete;
+let src;
 
 let iconSendVoiceMessage = document.querySelector(".send-voice-message"); // кнопка для ввода голосового сообщения
 let iconSendVideoMessage = document.querySelector(".send-video"); // кнопка для ввода видео сообщения
@@ -71,15 +75,9 @@ export const getPermissionAudio = async function () {
     audioPlayer = new Message(userCoords);
     audioPlayer.createtUlList();
     let li = audioPlayer.createAudio();
-
     let audioPlayerElement = li.querySelector(".audio");
     audioPlayerElement.classList.add("recording");
     audioPlayer.createAttribute(li);
-
-    // videoPlayerElement.srcObject = stream;
-    // videoPlayerElement.addEventListener("canplay", () => {
-    //   videoPlayerElement.play();
-    // });
 
     recorder = new MediaRecorder(stream);
     const chunks = [];
@@ -94,11 +92,11 @@ export const getPermissionAudio = async function () {
       chunks.push(event.data);
     });
 
-    recorder.addEventListener("stop", () => {
+    recorder.addEventListener("stop", (e) => {
       const blob = new Blob(chunks);
-
       audioPlayerElement.src = URL.createObjectURL(blob);
       src = URL.createObjectURL(blob);
+      if (sendOrDelete) sendMediaMsg(audioPlayerElement.parentElement);
     });
 
     audioPermisiion = true;
@@ -122,11 +120,6 @@ export const getPermissionVideo = async function () {
     videoPlayerElement.classList.add("recording");
     videoPlayer.createAttribute(li);
 
-    // videoPlayerElement.srcObject = stream;
-    // videoPlayerElement.addEventListener("canplay", () => {
-    //   videoPlayerElement.play();
-    // });
-
     recorder = new MediaRecorder(stream);
     const chunks = [];
 
@@ -145,6 +138,7 @@ export const getPermissionVideo = async function () {
 
       videoPlayerElement.src = URL.createObjectURL(blob);
       src = URL.createObjectURL(blob);
+      if (sendOrDelete) sendMediaMsg(videoPlayerElement.parentElement);
     });
 
     videoPermisiion = true;
@@ -191,6 +185,10 @@ export const sendTextMessage = async function (e) {
     newMessage.createtUlList();
     let msgElement = newMessage.createLink(text);
     newMessage.createAttribute(msgElement);
+
+    let deleteMsg = msgElement.querySelector(".element-delete");
+    deleteMsg.addEventListener("click", deleteThisMsg);
+
     sendToServer(msgElement);
     return;
   }
@@ -199,10 +197,14 @@ export const sendTextMessage = async function (e) {
   newMessage.createtUlList();
   let msgElement = newMessage.createMsg(text);
   newMessage.createAttribute(msgElement);
+
+  let deleteMsg = msgElement.querySelector(".element-delete");
+  deleteMsg.addEventListener("click", deleteThisMsg);
+
   sendToServer(msgElement);
 }; // стандартная функция отправка текстовых сообщений. ее слушаем обычно если не записываем видео или аудио
 
-export const startRecordAudio = async () => {
+export const startRecordAudio = async (e) => {
   if (!userCoords) await getPermissionCoords();
   await getPermissionAudio();
 
@@ -211,6 +213,11 @@ export const startRecordAudio = async () => {
   console.log("audio");
 
   changeBtnToTimer();
+
+  let deleteMsg = document
+    .querySelector(".recording")
+    .parentElement.querySelector(".element-delete");
+  deleteMsg.style.display = "none";
 
   send_.addEventListener("click", sendAudio);
   stop_.addEventListener("click", deleteAudio);
@@ -223,16 +230,20 @@ export const sendAudio = async function () {
   changeBtnToStandart();
 
   recorder.stop();
+
   stream.getTracks().forEach((track) => track.stop());
 
   let player = document.querySelector(".recording");
-  // let playerParent = player.parentElement;
-  // sendToServer(playerParent);
+
+  let deleteMsg = player.parentElement.querySelector(".element-delete");
+  deleteMsg.style.display = "block";
+
   player.classList.remove("recording");
 
   send_.removeEventListener("click", sendAudio);
   stop_.removeEventListener("click", deleteAudio);
-
+  deleteMsg.addEventListener("click", deleteThisMsg);
+  sendOrDelete = true;
   deleteTimer();
 }; // функция отправки аудио
 
@@ -250,8 +261,8 @@ export const deleteAudio = async function () {
   send_.removeEventListener("click", sendAudio);
   stop_.removeEventListener("click", deleteAudio);
 
+  sendOrDelete = false;
   changeBtnToStandart();
-
   deleteTimer();
 }; // функция удаления аудио
 
@@ -262,6 +273,11 @@ export const startRecordVideo = async () => {
   if (!videoPermisiion) return;
 
   changeBtnToTimer();
+
+  let deleteMsg = document
+    .querySelector(".recording")
+    .parentElement.querySelector(".element-delete");
+  deleteMsg.style.display = "none";
 
   send_.addEventListener("click", sendVideo);
   stop_.addEventListener("click", deleteVideo);
@@ -278,6 +294,9 @@ export const sendVideo = async function () {
   stream.getTracks().forEach((track) => track.stop());
 
   let player = document.querySelector(".recording");
+
+  let deleteMsg = player.parentElement.querySelector(".element-delete");
+  deleteMsg.style.display = "block";
   // let playerParent = player.parentElement;
   // sendToServer(playerParent);
 
@@ -285,7 +304,9 @@ export const sendVideo = async function () {
 
   send_.removeEventListener("click", sendVideo);
   stop_.removeEventListener("click", deleteVideo);
+  deleteMsg.addEventListener("click", deleteThisMsg);
 
+  sendOrDelete = true;
   deleteTimer();
 }; // функция отправки видео
 
@@ -303,8 +324,8 @@ export const deleteVideo = async function (e) {
   send_.removeEventListener("click", sendVideo);
   stop_.removeEventListener("click", deleteVideo);
 
+  sendOrDelete = false;
   changeBtnToStandart();
-
   deleteTimer();
 }; // функция удаления видео
 
@@ -384,4 +405,72 @@ export const changeBtnToStandart = () => {
   send_.style.visibility = "hidden";
   stop_.style.visibility = "hidden";
   timer_.style.visibility = "hidden";
+};
+
+export const saveThisFile = () => {
+  console.log("save file");
+};
+
+export const loadFile = (e) => {
+  let form = document.querySelector(".form-send-file");
+  let sticker = document.querySelector(".send-file-sticker");
+  let btnSubmit = document.querySelector(".form-btn-submit");
+
+  form.classList.add("form-send-file-loaded");
+  btnSubmit.classList.add("form-btn-submit-loaded");
+  sticker.style.visibility = "visible";
+  sticker.textContent++;
+};
+
+export const sendFile = (e) => {
+  e.preventDefault();
+  let form = e.target;
+  let sticker = document.querySelector(".send-file-sticker");
+  let btnSubmit = document.querySelector(".form-btn-submit");
+  let inputSendFileTextArea = document.getElementById("write-message-input");
+
+  form.classList.remove("form-send-file-loaded");
+  btnSubmit.classList.remove("form-btn-submit-loaded");
+  sticker.classList.add("sticker-animation");
+
+  sticker.addEventListener("animationend", () => {
+    sticker.style.visibility = "hidden";
+    sticker.classList.remove("sticker-animation");
+    sticker.textContent = "";
+  });
+
+  let file = e.srcElement[0].files[0];
+  if (!file) return;
+
+  let blob = new Blob([file]);
+  let link = URL.createObjectURL(blob);
+
+  let id = () => Math.random().toString(36).slice(2);
+
+  inputSendFileTextArea.style.display = "block";
+
+  sendFileEvent(inputSendFileTextArea.files, link);
+  // console.log("sendfile", inputSendFileTextArea.files);
+};
+
+export const sendFileEvent = async (file, link) => {
+  console.log(file);
+  if (!userCoords) {
+    await getPermissionCoords();
+  }
+  let newMessage = new Message(userCoords);
+  newMessage.createtUlList();
+  let msgElement = newMessage.createFile(file, link);
+  newMessage.createAttribute(msgElement);
+
+  let saveMsg = msgElement.querySelector(".element-save-content");
+  let deleteMsg = msgElement.querySelector(".element-delete");
+
+  deleteMsg.addEventListener("click", deleteThisMsg);
+  saveMsg.addEventListener("click", saveThisFile);
+
+  saveMsg.addEventListener("click", downloadFile);
+
+  sendFileToServer(msgElement, file);
+  return;
 };
