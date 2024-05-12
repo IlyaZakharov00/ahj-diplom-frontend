@@ -31,8 +31,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let allMsgFromServer = await getAllMsgFromServer();
   for (const object of allMsgFromServer.fullMessages) {
+    console.log(object);
     let msg = new MsgFromServer();
     msg.crtAllMsg(object);
+    // видео и аудио сбиваются в порядке и не работает воспроизведение спустя какое то время
   }
   ///
   const btnMenu = document.querySelector(".menu"); // кнопка меню в header

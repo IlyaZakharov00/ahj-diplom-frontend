@@ -1,15 +1,3 @@
-export const downloadFile = (e) => {
-  let msg = e.target.closest(".msg");
-  let id = msg.getAttribute("id");
-  let content = msg.querySelector(".element-content");
-  let link = content.getAttribute("href");
-  let name = content.textContent;
-  // let type = content.textContent
-  // let file = new Blob([])
-  console.log(msg, content, link, name, id);
-  // console.log(file);
-};
-
 export const loadFile = (e) => {
   let inputSendFileTextArea = document.getElementById("write-message-input");
   let form = document.querySelector(".form-send-file");
@@ -20,12 +8,7 @@ export const loadFile = (e) => {
   btnSubmit.classList.add("form-btn-submit-loaded");
   sticker.style.visibility = "visible";
   inputSendFileTextArea.style.display = "none";
-  sticker.textContent++;  
-
-};
-
-export const saveThisFile = () => {
-  console.log("save file");
+  sticker.textContent++;
 };
 
 export const dropListener = (e) => {
@@ -42,15 +25,14 @@ export const dropListener = (e) => {
   list.items.add(file);
   inputSendFile.files = list.files;
   inputSendFile.dispatchEvent(change);
-  inputSendFileTextArea.style.display = "none"; 
-
+  inputSendFileTextArea.style.display = "none";
 };
 
 export const validateCoords = (coords) => {
   let check = [coords].join("").includes(",");
 
   if (!check) {
-    alert("Не правилньо введены координаты!");
+    alert("Не правильно введены координаты!");
     return;
   }
 

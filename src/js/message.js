@@ -94,14 +94,13 @@ export class Message {
   }
 
   createFile(file, link) {
-    
     let ul = document.querySelector(".list-msg");
     let element = document.createElement("li");
     let header = document.createElement("div");
     let date = document.createElement("span");
     let time = document.createElement("span");
     let contentContainer = document.createElement("div");
-    let content = document.createElement("p");
+    let content = document.createElement("a");
     let save = document.createElement("p");
     let footer = document.createElement("div");
     let geolocation = document.createElement("span");
@@ -110,6 +109,7 @@ export class Message {
     element.setAttribute("type", "file");
     element.setAttribute("id", this.createId());
     content.setAttribute("href", link);
+    content.download = file.name;
 
     element.classList.add("msg");
     header.classList.add("element-header");
@@ -185,7 +185,6 @@ export class Message {
   }
 
   createAudio(data) {
-    console.log(data);
     let ul = document.querySelector(".list-msg");
     let element = document.createElement("li");
     let audio = document.createElement("audio");

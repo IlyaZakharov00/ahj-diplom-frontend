@@ -140,15 +140,14 @@ export class Chat {
     });
 
     let file = e.srcElement[0].files[0];
+    let filesList = e.srcElement[0].files;
     if (!file) return;
 
     let blob = new Blob([file]);
     let link = URL.createObjectURL(blob);
 
-    // let id = () => Math.random().toString(36).slice(2);
-
     inputSendFileTextArea.style.display = "block";
-    sendFileEvent(file, link);
-    // console.log("sendfile", inputSendFileTextArea.files);
+    console.log(file, blob, filesList);
+    sendFileEvent(filesList, link);
   };
 }

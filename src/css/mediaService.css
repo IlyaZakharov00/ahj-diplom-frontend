@@ -80,6 +80,11 @@
     font-family: "Nunito";
 }
 
+.element-content:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .element-save-content {
     background-image: url('/src/img/save.svg');
     background-repeat: no-repeat;

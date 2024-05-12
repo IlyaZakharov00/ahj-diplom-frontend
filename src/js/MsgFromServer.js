@@ -103,6 +103,9 @@ export class MsgFromServer {
   }
 
   crtFile(file) {
+    let blob = new Blob([file.file.data]);
+    console.log(blob);
+
     this.crtUlList();
 
     let ul = document.querySelector(".list-msg");
@@ -111,15 +114,14 @@ export class MsgFromServer {
     let date = document.createElement("span");
     let time = document.createElement("span");
     let contentContainer = document.createElement("div");
-    let content = document.createElement("p");
+    let content = document.createElement("a");
     let save = document.createElement("p");
     let footer = document.createElement("div");
     let geolocation = document.createElement("span");
     let deleteMsg = document.createElement("span");
 
     element.setAttribute("type", "file");
-    element.setAttribute("id", file.id);
-    content.setAttribute("href", file.link);
+    element.setAttribute("id", file.data.id);
 
     element.classList.add("msg");
     header.classList.add("element-header");
@@ -132,10 +134,10 @@ export class MsgFromServer {
     geolocation.classList.add("element-geolocation");
     deleteMsg.classList.add("element-delete");
 
-    content.textContent = file.name;
-    date.textContent = file.date;
-    time.textContent = file.time;
-    geolocation.textContent = file.coords;
+    content.textContent = file.data.name;
+    date.textContent = file.data.date;
+    time.textContent = file.data.time;
+    geolocation.textContent = file.data.coords;
 
     header.appendChild(date);
     header.appendChild(time);
@@ -203,6 +205,8 @@ export class MsgFromServer {
   }
 
   crtAudio(item, link) {
+    // let link_ = new File(link, 'myFile');
+
     this.crtUlList();
 
     let ul = document.querySelector(".list-msg");
@@ -257,20 +261,28 @@ export class MsgFromServer {
       let message = this.crtMsg(item);
       let deleteMsg = message.querySelector(".element-delete");
       deleteMsg.addEventListener("click", deleteThisMsg);
+      return;
     }
 
     if (item.type == "link") {
       let message = this.crteLink(item);
       let deleteMsg = message.querySelector(".element-delete");
       deleteMsg.addEventListener("click", deleteThisMsg);
+      return;
     }
 
-    if (item.type == "file") {
+    if (item.data.type == "file") {
+      //создание файлов
       let message = this.crtFile(item);
       let deleteMsg = message.querySelector(".element-delete");
       let saveFile = message.querySelector(".element-save-content");
-      deleteMsg.addEventListener("click", deleteThisMsg);
+      let content = message.querySelector(".element-content");
+
+      content.addEventListener("click", downloadFile);
       saveFile.addEventListener("click", downloadFile);
+
+      deleteMsg.addEventListener("click", deleteThisMsg);
+      return;
     }
 
     if (item.type == "audio") {
@@ -288,6 +300,7 @@ export class MsgFromServer {
         let message = message_.crtAudio(item, link);
         let deleteMsg = message.querySelector(".element-delete");
         deleteMsg.addEventListener("click", deleteThisMsg);
+        return;
       };
     }
 
@@ -306,6 +319,7 @@ export class MsgFromServer {
         let message = message_.crtVideo(item, link);
         let deleteMsg = message.querySelector(".element-delete");
         deleteMsg.addEventListener("click", deleteThisMsg);
+        return;
       };
     }
   }

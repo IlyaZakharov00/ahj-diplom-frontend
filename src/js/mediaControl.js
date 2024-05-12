@@ -3,7 +3,6 @@ import { sendToServer } from "./serverControl";
 import { deleteThisMsg } from "./serverControl";
 import { sendMediaMsg } from "./serverControl";
 import { sendFileToServer } from "./serverControl";
-import { downloadFile } from "./serverControl";
 import { validateCoords } from "./callbacks";
 
 let userCoords;
@@ -96,6 +95,9 @@ export const getPermissionAudio = async function () {
       const blob = new Blob(chunks);
       audioPlayerElement.src = URL.createObjectURL(blob);
       src = URL.createObjectURL(blob);
+      // console.log(blob);
+      // let file = new File(chunks, 'myFile')
+      // console.log(file);
       if (sendOrDelete) sendMediaMsg(audioPlayerElement.parentElement);
     });
 
@@ -407,8 +409,11 @@ export const changeBtnToStandart = () => {
   timer_.style.visibility = "hidden";
 };
 
-export const saveThisFile = () => {
-  console.log("save file");
+export const saveThisFile = (e) => {
+  let msg = e.target.parentElement.closest(".msg");
+  let saveBtn = msg.querySelector(".element-save-content");
+  let content = msg.querySelector(".element-content");
+  content.click();
 };
 
 export const loadFile = (e) => {
@@ -423,7 +428,7 @@ export const loadFile = (e) => {
 };
 
 export const sendFile = (e) => {
-  e.preventDefault();
+  // e.preventDefault();
   let form = e.target;
   let sticker = document.querySelector(".send-file-sticker");
   let btnSubmit = document.querySelector(".form-btn-submit");
@@ -449,28 +454,27 @@ export const sendFile = (e) => {
 
   inputSendFileTextArea.style.display = "block";
 
+  console.log(blob, typeof blob);
   sendFileEvent(inputSendFileTextArea.files, link);
   // console.log("sendfile", inputSendFileTextArea.files);
 };
 
-export const sendFileEvent = async (file, link) => {
-  console.log(file);
+export const sendFileEvent = async (filesList, link) => {
   if (!userCoords) {
     await getPermissionCoords();
   }
   let newMessage = new Message(userCoords);
   newMessage.createtUlList();
-  let msgElement = newMessage.createFile(file, link);
+  let msgElement = newMessage.createFile(filesList[0], link);
   newMessage.createAttribute(msgElement);
 
   let saveMsg = msgElement.querySelector(".element-save-content");
   let deleteMsg = msgElement.querySelector(".element-delete");
 
   deleteMsg.addEventListener("click", deleteThisMsg);
+
   saveMsg.addEventListener("click", saveThisFile);
 
-  saveMsg.addEventListener("click", downloadFile);
-
-  sendFileToServer(msgElement, file);
+  sendFileToServer(msgElement, filesList);
   return;
 };
