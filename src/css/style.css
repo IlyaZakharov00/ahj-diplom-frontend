@@ -250,6 +250,7 @@
     z-index: 1;
     width: 220px;
     transform: translate(-50%, -50%);
+    position: fixed;
 }
 
 .close-all-messages {

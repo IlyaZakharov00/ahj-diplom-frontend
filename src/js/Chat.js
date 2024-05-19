@@ -111,7 +111,24 @@ export class Chat {
   };
 
   filterMessages = (e) => {
-    console.log(e, e.target, e.target.getAttribute("type"));
+    let showAllMsg = document.querySelector(".allMsgs");
+    showAllMsg.click();
+    let chat = document.querySelector(".messages-container");
+    let type = e.target.getAttribute("type");
+    let allMsgInChat = chat.querySelectorAll(".msg");
+    let msgWithType = chat.querySelectorAll(`[type=${type}]`);
+
+    for (const msg of allMsgInChat) {
+      if (msg.getAttribute("type") !== type) {
+        msg.style.display = "none";
+      }
+    }
+
+    if (type == null) {
+      for (const msg of allMsgInChat) {
+        msg.style.display = "block";
+      }
+    }
   };
 
   sendFile = (e) => {
