@@ -1,6 +1,6 @@
 let server1 = "http://localhost:3030";
 let server2 = "https://ahj-diplom-backend.onrender.com";
-let server = server1;
+let server = server2;
 
 export const sendToServer = async (e) => {
   let eId = e.getAttribute("id");
