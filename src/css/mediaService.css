@@ -80,7 +80,7 @@
     font-family: "Nunito";
 }
 
-.element-content:hover {
+.element-content-file:hover {
     text-decoration: underline;
     cursor: pointer;
 }

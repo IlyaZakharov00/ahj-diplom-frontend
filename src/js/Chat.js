@@ -45,11 +45,12 @@ export class Chat {
   };
 
   changeMicroToMessage = (e) => {
-    let sendText = document.querySelector(".send-text-message");
+    let sendText = document.querySelector(".send-text-message"); // есть ли уже иконка
+
     if (
-      e.data == null &&
-      e.data !== undefined &&
-      e.inputType !== "insertFromPaste" &&
+      (e.inputType == "deleteContentBackward" ||
+        e.inputType == "deleteContentForward" ||
+        e.inputType == "deleteByCut") &&
       (this.textArea.value == "" || !sendText)
     ) {
       this.iconSendVoiceMessage.classList.remove("send-text-message");
@@ -59,21 +60,12 @@ export class Chat {
       return;
     }
 
-    if (this.textArea.value == "" || !sendText) {
+    if (this.textArea.value == "" && sendText) {
       this.iconSendVoiceMessage.classList.remove("send-text-message");
-    }
-
-    if (
-      (e.data == " " || sendText || e.data == null) &&
-      !sendText &&
-      e.data !== undefined &&
-      e.inputType !== "insertFromPaste"
-    ) {
-      this.iconSendVoiceMessage.classList.add("send-voice-message");
       sendText.addEventListener("click", startRecordAudio);
       sendText.removeEventListener("click", sendTextMessage);
-      return;
     }
+
     this.iconSendVoiceMessage.classList.add("send-text-message");
     this.iconSendVoiceMessage.classList.remove("send-voice-message");
     sendText = document.querySelector(".send-text-message");
@@ -123,6 +115,7 @@ export class Chat {
   };
 
   sendFile = (e) => {
+    console.log("send file");
     e.preventDefault();
     let form = e.target;
     let sticker = document.querySelector(".send-file-sticker");
@@ -147,7 +140,6 @@ export class Chat {
     let link = URL.createObjectURL(blob);
 
     inputSendFileTextArea.style.display = "block";
-    console.log(file, blob, filesList);
     sendFileEvent(filesList, link);
   };
 }

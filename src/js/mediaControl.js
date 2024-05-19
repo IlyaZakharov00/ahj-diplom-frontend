@@ -95,10 +95,7 @@ export const getPermissionAudio = async function () {
       const blob = new Blob(chunks);
       audioPlayerElement.src = URL.createObjectURL(blob);
       src = URL.createObjectURL(blob);
-      // console.log(blob);
-      // let file = new File(chunks, 'myFile')
-      // console.log(file);
-      if (sendOrDelete) sendMediaMsg(audioPlayerElement.parentElement);
+      if (sendOrDelete) sendMediaMsg(audioPlayerElement.parentElement, blob);
     });
 
     audioPermisiion = true;
@@ -140,7 +137,7 @@ export const getPermissionVideo = async function () {
 
       videoPlayerElement.src = URL.createObjectURL(blob);
       src = URL.createObjectURL(blob);
-      if (sendOrDelete) sendMediaMsg(videoPlayerElement.parentElement);
+      if (sendOrDelete) sendMediaMsg(videoPlayerElement.parentElement, blob);
     });
 
     videoPermisiion = true;
@@ -178,11 +175,14 @@ export const sendTextMessage = async function (e) {
   }
 
   let inputText = document.querySelector(".write-message");
+  let sendText = document.querySelector(".send-text-message"); // есть ли уже иконка
   let text = inputText.value;
-  if (text == "") text = "Пустое сообщение :(";
+
+  if (text == "" || text.match(/^ /g)) {
+    return;
+  }
 
   if (text.toString().match(/^http.{0,}/g)) {
-    console.log("это ссылка", text);
     let newMessage = new Message(userCoords);
     newMessage.createtUlList();
     let msgElement = newMessage.createLink(text);
@@ -190,6 +190,12 @@ export const sendTextMessage = async function (e) {
 
     let deleteMsg = msgElement.querySelector(".element-delete");
     deleteMsg.addEventListener("click", deleteThisMsg);
+
+    inputText.value = "";
+    sendText.addEventListener("click", startRecordAudio);
+    sendText.removeEventListener("click", sendTextMessage);
+    sendText.classList.remove("send-text-message");
+    sendText.classList.add("send-voice-message");
 
     sendToServer(msgElement);
     return;
@@ -203,6 +209,12 @@ export const sendTextMessage = async function (e) {
   let deleteMsg = msgElement.querySelector(".element-delete");
   deleteMsg.addEventListener("click", deleteThisMsg);
 
+  inputText.value = "";
+  sendText.addEventListener("click", startRecordAudio);
+  sendText.removeEventListener("click", sendTextMessage);
+  sendText.classList.remove("send-text-message");
+  sendText.classList.add("send-voice-message");
+
   sendToServer(msgElement);
 }; // стандартная функция отправка текстовых сообщений. ее слушаем обычно если не записываем видео или аудио
 
@@ -211,8 +223,6 @@ export const startRecordAudio = async (e) => {
   await getPermissionAudio();
 
   if (!audioPermisiion) return;
-
-  console.log("audio");
 
   changeBtnToTimer();
 
@@ -299,8 +309,6 @@ export const sendVideo = async function () {
 
   let deleteMsg = player.parentElement.querySelector(".element-delete");
   deleteMsg.style.display = "block";
-  // let playerParent = player.parentElement;
-  // sendToServer(playerParent);
 
   player.classList.remove("recording");
 
@@ -338,7 +346,6 @@ export const createTimer = () => {
   timer_.textContent = `0${minutes}:0${seconds}`;
 
   timer = setInterval(() => {
-    // debugger;
     timer_.textContent = `${minutes}:${seconds++}`;
 
     if (String(seconds).length == 1 && String(minutes).length == 1) {
@@ -411,7 +418,6 @@ export const changeBtnToStandart = () => {
 
 export const saveThisFile = (e) => {
   let msg = e.target.parentElement.closest(".msg");
-  let saveBtn = msg.querySelector(".element-save-content");
   let content = msg.querySelector(".element-content");
   content.click();
 };
@@ -428,7 +434,6 @@ export const loadFile = (e) => {
 };
 
 export const sendFile = (e) => {
-  // e.preventDefault();
   let form = e.target;
   let sticker = document.querySelector(".send-file-sticker");
   let btnSubmit = document.querySelector(".form-btn-submit");
@@ -454,9 +459,7 @@ export const sendFile = (e) => {
 
   inputSendFileTextArea.style.display = "block";
 
-  console.log(blob, typeof blob);
   sendFileEvent(inputSendFileTextArea.files, link);
-  // console.log("sendfile", inputSendFileTextArea.files);
 };
 
 export const sendFileEvent = async (filesList, link) => {

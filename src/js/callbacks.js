@@ -1,4 +1,6 @@
 export const loadFile = (e) => {
+  console.log("loadfile " + e);
+  if (e.srcElement.files.length == 0) return;
   let inputSendFileTextArea = document.getElementById("write-message-input");
   let form = document.querySelector(".form-send-file");
   let sticker = document.querySelector(".send-file-sticker");
