@@ -41,11 +41,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   let { lastFiveMsg, otherMsg } = msgOnGroup(allMsgFromServer.fullMessages);
-
   if (lastFiveMsg.length !== 0) {
     let chatMain = document.querySelector(".chat-main");
     let msgsOnChat = chatMain.querySelectorAll(".msg");
-    let firstElement = document.getElementById(lastFiveMsg[0].id);
+    let id = lastFiveMsg[0].id;
+    if (!id) id = lastFiveMsg[0].data.id;
+    let firstElement = document.getElementById(id);
     firstElement.scrollIntoView(top);
 
     chatMain.addEventListener("scroll", (e) => {

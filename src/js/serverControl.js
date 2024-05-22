@@ -241,19 +241,15 @@ export const createMediaMessageFromServer = async (e) => {
   let id = msg.getAttribute("id");
   let server11 = server + `/downloadMediaMessage?id=${id}`;
 
-  console.log("ждем ответ сервера ");
   const response = await fetch(server11, {
     headers: { "Content-Type": "application/json" },
     method,
   }).then((response_) => {
-    console.log("получили ответ");
     return response_.blob();
   });
 
-  console.log("создаем ссылку");
   let link = URL.createObjectURL(response);
   content.setAttribute("src", link);
-  console.log("поставили src");
 
   console.log(response);
   return response;
