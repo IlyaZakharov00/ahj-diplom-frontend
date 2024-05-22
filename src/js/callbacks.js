@@ -49,3 +49,57 @@ export const validateCoords = (coords) => {
   console.log(_userCoords);
   return _userCoords;
 };
+
+export const msgOnGroup = (fullMessages) => {
+  let lastFiveMsg = [];
+  let fiveGroup = [];
+  let otherMsg = [];
+
+  for (let i = fullMessages.length; i > fullMessages.length - 5; i--) {
+    if (fullMessages[i - 1] === undefined) continue;
+    lastFiveMsg.push(fullMessages[i - 1]);
+  }
+
+  for (let i = fullMessages.length; i > 0; i--) {
+    if (!lastFiveMsg.includes(fullMessages[i - 1])) {
+      fiveGroup.push([fullMessages[i - 1]]);
+      if (fiveGroup.length == 5) {
+        otherMsg.push(fiveGroup);
+        fiveGroup = [];
+      } else if (i == 1 && fiveGroup.length !== 5) {
+        otherMsg.push(fiveGroup);
+      }
+    }
+  }
+
+  for (const item of otherMsg) {
+    for (const msg of item) {
+      let id = msg[0].id;
+      if (!id) id = msg[0].data.id;
+      let msgById = document.getElementById(id);
+
+      msgById.classList.add("hidden");
+    }
+  }
+  return { lastFiveMsg, otherMsg };
+};
+
+export const loadMoreMsg = (msgsArray, firstElemAfterVisible) => {
+  let chatMain = document.querySelector(".chat-main");
+
+  let allOtherMsg = msgsArray;
+  let nextGroupMsg = msgsArray[0];
+  if (allOtherMsg.length == 0) return;
+
+  for (const item of nextGroupMsg) {
+    for (const msg of item) {
+      let id = msg.id;
+      if (!id) id = msg.data.id;
+      let msgElement = document.getElementById(id);
+      msgElement.classList.remove("hidden");
+    }
+  }
+  firstElemAfterVisible.scrollIntoView(top);
+  allOtherMsg.splice(0, 1);
+  nextGroupMsg = undefined;
+};

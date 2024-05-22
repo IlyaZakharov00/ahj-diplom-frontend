@@ -111,7 +111,10 @@ export class Chat {
   };
 
   filterMessages = (e) => {
+    let chatMain = document.querySelector(".chat-main");
     let showAllMsg = document.querySelector(".allMsgs");
+    let closeAllMessages = document.querySelector(".close-all-messages");
+    closeAllMessages.click();
     showAllMsg.click();
     let chat = document.querySelector(".messages-container");
     let type = e.target.getAttribute("type");
@@ -121,14 +124,17 @@ export class Chat {
     for (const msg of allMsgInChat) {
       if (msg.getAttribute("type") !== type) {
         msg.style.display = "none";
+        msg.classList.add("hidden");
       }
     }
 
     if (type == null) {
       for (const msg of allMsgInChat) {
         msg.style.display = "block";
+        if (msg.classList.contains("hidden")) msg.classList.remove("hidden");
       }
     }
+    chatMain.scrollTo(screenTop, innerHeight);
   };
 
   sendFile = (e) => {

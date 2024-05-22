@@ -258,7 +258,6 @@ export class MsgFromServer {
   }
 
   crtAllMsg(item) {
-    console.log(item);
     if (item.type == "txt") {
       let message = this.crtMsg(item);
       let deleteMsg = message.querySelector(".element-delete");

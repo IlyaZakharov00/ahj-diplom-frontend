@@ -55,7 +55,8 @@
     background-color: white;
     margin-top: 10px;
     border-radius: 20px;
-    background-color: #9c1ec9;
+    /* background-color: #9c1ec9; */
+    background-color: #e2aa3a;
     border: 2px solid white;
     box-shadow: 20px 5px 15px white;
 }

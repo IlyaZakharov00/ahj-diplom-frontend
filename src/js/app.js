@@ -7,6 +7,8 @@ import { startRecordAudio } from "./mediaControl";
 import { startRecordVideo } from "./mediaControl";
 import { availableServer } from "./serverControl";
 import { getAllMsgFromServer } from "./serverControl";
+import { msgOnGroup } from "./callbacks";
+import { loadMoreMsg } from "./callbacks";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let connectionServer = document.querySelector(".connection-to-server");
@@ -32,10 +34,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
   let allMsgFromServer = await getAllMsgFromServer();
+
   for (const object of allMsgFromServer.fullMessages) {
     let msg = new MsgFromServer();
     msg.crtAllMsg(object);
   }
+
+  let { lastFiveMsg, otherMsg } = msgOnGroup(allMsgFromServer.fullMessages);
+
+  if (lastFiveMsg.length !== 0) {
+    let chatMain = document.querySelector(".chat-main");
+    let msgsOnChat = chatMain.querySelectorAll(".msg");
+    let firstElement = document.getElementById(lastFiveMsg[0].id);
+    firstElement.scrollIntoView(top);
+
+    chatMain.addEventListener("scroll", (e) => {
+      let msgOnChatHidden = chatMain.querySelectorAll(".hidden");
+      if (chatMain.scrollTop == 0 && msgOnChatHidden.length !== 0) {
+        let allHiddenElemet_ = document.querySelectorAll(".hidden");
+        let allHiddenElemet = Array.from(allHiddenElemet_);
+        let firstElemAfterVisible = allHiddenElemet[allHiddenElemet.length - 1];
+        loadMoreMsg(otherMsg, firstElemAfterVisible);
+      }
+    });
+  }
+
   ///
   const btnMenu = document.querySelector(".menu"); // кнопка меню в header
   const containerMenu = document.querySelector(".container-menu"); // меню с пунктами в header
